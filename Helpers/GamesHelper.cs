@@ -26,9 +26,25 @@ namespace Bleff.Helpers
             return _GameList;
         }
 
+        private static void _AddGameToList(Game newGame)
+        {
+            lock (_GamesLock)
+            {
+                _GetGames().Add(newGame);
+            }
+        }
+
         private static List<Player> _GetGamePlayers(Game game)
         {
             return game.Players;
+        }
+
+        public static Game CreateNewGame(Player player)
+        {
+            var newGame = new Game(player);
+            _AddGameToList(newGame);
+
+            return newGame;
         }
 
         public static Game GetGameByID(int id)

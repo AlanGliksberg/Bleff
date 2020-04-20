@@ -14,6 +14,7 @@ namespace Bleff.Models
             {
                 liderPlayer
             };
+            State = GameState.Waiting;
         }
 
         public object _PlayersLock = new object();

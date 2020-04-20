@@ -14,7 +14,7 @@ namespace Bleff.Controllers
         public ActionResult Create_Game_Init()
         {
             var player = GetCurrentPlayer();
-            var newGame = new Game(player);
+            var newGame = Helpers.GamesHelper.CreateNewGame(player);
 
             var gameVM = new GameVM();
             gameVM.ActualGame = newGame;
