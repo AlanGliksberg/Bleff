@@ -8,6 +8,7 @@ namespace Bleff.Helpers
 {
     public static class GamesHelper
     {
+        private const int MAX_LOBBIES_COUNT = 100;
         private static List<Game> _GameList { get; set; }
 
         private static object _GamesLock = new object();
@@ -39,8 +40,19 @@ namespace Bleff.Helpers
             return game.Players;
         }
 
+        private static bool _LobbiesFull()
+        {
+            lock (_GamesLock)
+            {
+                return _GetGames().Count < MAX_LOBBIES_COUNT;
+            }
+        }
+
         public static Game CreateNewGame(Player player)
         {
+            if (_LobbiesFull())
+                throw new Exception("Lobbies are full");
+
             var newGame = new Game(player);
             _AddGameToList(newGame);
 
@@ -67,9 +79,10 @@ namespace Bleff.Helpers
             int newID;
             bool newIdFound = false;
 
+            //TODO - improve performance
             do
             {
-                newID = random.Next(0, 100);
+                newID = random.Next(0, MAX_LOBBIES_COUNT);
                 var games = _GetGames();
                 lock (_GamesLock)
                 {

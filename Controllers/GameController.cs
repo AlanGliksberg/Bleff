@@ -34,13 +34,13 @@ namespace Bleff.Controllers
                 return RedirectToAction("index", "home");
             }
 
-            if (game.State == Models.GameState.Started)
+            if (game.State == GameState.Started)
             {
                 TempData[Keys.TempDataKeys.GameStarted] = true;
                 return RedirectToAction("index", "home");
             }
 
-            if (game.State == Models.GameState.Over)
+            if (game.State == GameState.Over)
             {
                 TempData[Keys.TempDataKeys.GameOver] = true;
                 return RedirectToAction("index", "home");
