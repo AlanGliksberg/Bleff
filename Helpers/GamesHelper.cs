@@ -48,8 +48,11 @@ namespace Bleff.Helpers
 
         public static void AddPlayerToGame(Game game, Player player)
         {
-            var players = _GetGamePlayers(game);
-            players.Add(player);
+            lock (_GamesLock)
+            {
+                var players = _GetGamePlayers(game);
+                players.Add(player);
+            }
         }
     }
 }
