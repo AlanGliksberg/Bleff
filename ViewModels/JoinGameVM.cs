@@ -6,10 +6,10 @@ using System.Web;
 
 namespace Bleff.ViewModels
 {
-    public class StartGameVM
+    public class JoinGameVM : iStartGame
     {
-        public StartingAction StartedActionSelected { get; set; }
         public int GameId { get; set; }
+        public StartingAction StartedActionSelected { get; set; }
         public string PlayerName { get; set; }
     }
 }

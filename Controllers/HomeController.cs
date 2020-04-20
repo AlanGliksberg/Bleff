@@ -24,7 +24,7 @@ namespace Bleff.Controllers
         }
 
         [HttpPost]
-        public ActionResult Index(StartGameVM startGameVM)
+        public ActionResult Index(iStartGame startGameVM)
         {
             Player player;
 
@@ -32,7 +32,8 @@ namespace Bleff.Controllers
             {
                 player = new Player(startGameVM.PlayerName);
                 Session.Set(Keys.PlayerKeys.Player, player);
-                return RedirectToAction("join-game-init", "game", new { gameID = startGameVM.GameId });
+                var joinGameVM = (JoinGameVM)startGameVM;
+                return RedirectToAction("join-game-init", "game", new { gameID = joinGameVM.GameId });
             }
             else
             {
