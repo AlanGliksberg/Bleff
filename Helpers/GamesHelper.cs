@@ -44,7 +44,7 @@ namespace Bleff.Helpers
         {
             lock (_GamesLock)
             {
-                return _GetGames().Count < MAX_LOBBIES_COUNT;
+                return _GetGames().Count >= MAX_LOBBIES_COUNT;
             }
         }
 
