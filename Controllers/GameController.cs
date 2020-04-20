@@ -1,4 +1,6 @@
-﻿using System;
+﻿using Bleff.CustomExtensions;
+using Bleff.ViewModels;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
@@ -34,13 +36,18 @@ namespace Bleff.Controllers
 
             Helpers.GamesHelper.AddPlayerToGame(game, player);
 
+            var gameVM = new GameVM();
+
+            Session.Set(Keys.GameKeys.ActualGame, gameVM);
 
             return RedirectToAction("waiting-game");
         }
 
         public ActionResult Waiting_Game()
         {
-            return View();
+            var gameVM = Session.Get<GameVM>(Keys.GameKeys.ActualGame);
+
+            return View(gameVM);
         }
     }
 }
