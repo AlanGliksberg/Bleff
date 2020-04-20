@@ -11,7 +11,7 @@ namespace Bleff.Controllers
 {
     public class GameController : CustomController
     {
-        public ActionResult Create_Game_Init(int gameID)
+        public ActionResult Create_Game_Init()
         {
             var player = GetCurrentPlayer();
             var newGame = new Game(player);
