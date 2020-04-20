@@ -16,14 +16,14 @@
                 <th scope="col" class="col-xs-3">Jugadores</th>
             </tr>
         </thead>
-        <tbody>
+        <tbody id="playersTable">
             @for (int i = 0; i < Model.ActualGame.Players.Count; i++)
             {
                 var player = Model.ActualGame.Players[i];
 
                 <tr>
-                    <th scope="row" class="col-xs-1">@(i + 1)</th>
-                    <td class="col-xs-3" data-playerID="@player.PlayerID">
+                    <th scope="row" class="col-xs-1" data-position="@(i + 1)">@(i + 1)</th>
+                    <td class="col-xs-3">
                         @player.Name
 
                         @if (player.GameLider)
@@ -36,3 +36,32 @@
         </tbody>
     </table>
 </div>
+
+@section Scripts{
+
+    <script type="text/javascript">
+
+        $(document).ready(function () {
+            var lobby = $.connection.lobbyHub;
+
+            $.connection.hub.start().done(function () {
+                lobby.server.addPlayer('@Model.ActualPlayer.Name');
+            });
+
+            lobby.client.addPlayer = function (playerName) {
+                if (playerName == '@Model.ActualPlayer.Name') return;
+
+                newPlayerHtml = '<tr>\
+                                    <th scope="row" class="col-xs-1" data-position="%data-position%">%data-position%</th>\
+                                    <td class="col-xs-3">%data-playername%</td>\
+                                </tr>';
+                
+                var lastPlayerPosition = $("#playersTable tr:last :first").data("position") + 1;
+                var newPlayer = $(newPlayerHtml.replace(/%data-position%/g, lastPlayerPosition).replace("%data-playername%", playerName));
+
+                $("#playersTable").append(newPlayer);
+            }
+        });
+
+    </script>
+}
