@@ -20,7 +20,7 @@
                 <form action="/Home/Index" method="post">
                     <div class="form-group">
                         <label for="playerName">Nombre:</label>
-                        <input type="text" class="form-control" id="playerName" name="PlayerName">
+                        <input type="text" class="form-control" id="playerNameNewGame" name="PlayerName">
                     </div>
                     <button type="submit" id="btnCrearPartida" class="btn btn-primary">Crear Partida</button>
                     <input type="hidden" name="StartedActionSelected" value="@((int)Bleff.Models.StartingAction.NewGame)"/>
@@ -32,7 +32,7 @@
                 <form action="/Home/Index" method="post">
                     <div class="form-group">
                         <label for="playerName">Nombre:</label>
-                        <input type="text" class="form-control" id="playerName" name="PlayerName">
+                        <input type="text" class="form-control" id="playerNameJoinGame" name="PlayerName">
                     </div>
                     <div class="form-group">
                         <label for="gameID">Código de la Partida:</label>
@@ -46,6 +46,21 @@
         </div>
     </div>
 </div>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        @if(((bool?)TempData[Bleff.Keys.TempDataKeys.GameOver]).HasValue && ((bool?)TempData[Bleff.Keys.TempDataKeys.GameOver]).Value)
+        {
+            <text>showSimpleModal("Aviso", "El juego buscado ya terminó");</text>
+        }else if(((bool?)TempData[Bleff.Keys.TempDataKeys.GameSearchFailed]).HasValue && ((bool?)TempData[Bleff.Keys.TempDataKeys.GameSearchFailed]).Value)
+        {
+            <text>showSimpleModal("Aviso", "El juego buscado no se encontró");</text>
+        }else if(((bool?)TempData[Bleff.Keys.TempDataKeys.GameStarted]).HasValue && ((bool?)TempData[Bleff.Keys.TempDataKeys.GameStarted]).Value)
+        {
+            <text>showSimpleModal("Aviso", "El juego buscado ya está en curso");</text>
+        }
+    });
+</script>
 
 <style>
     .tab-pane{

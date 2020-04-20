@@ -6,6 +6,9 @@
     <title>Bleff</title>
     @Styles.Render("~/Content/css")
     @Scripts.Render("~/bundles/modernizr")
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/bootstrap")
+    @Scripts.Render("~/bundles/core")
 </head>
 <body>
     <div class="navbar navbar-inverse navbar-fixed-top">
@@ -31,9 +34,6 @@
         @RenderBody()
         <hr />
     </div>
-
-    @Scripts.Render("~/bundles/jquery")
-    @Scripts.Render("~/bundles/bootstrap")
     @RenderSection("scripts", required: false)
 </body>
 </html>
