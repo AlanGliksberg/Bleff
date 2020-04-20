@@ -9,15 +9,18 @@ namespace Bleff.Models
     {
         public Player(string name)
         {
+            PlayerID = Guid.NewGuid().ToString("N");
             Name = name;
             GameLider = false;
         }
         public Player(string name, bool gameLider)
         {
+            PlayerID = Guid.NewGuid().ToString("N");
             Name = name;
             GameLider = gameLider;
         }
 
+        public string PlayerID { get; set; }
         public string Name { get; set; }
         public bool GameLider { get; set; }
     }
