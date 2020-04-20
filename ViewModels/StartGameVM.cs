@@ -7,9 +7,10 @@ using System.Threading.Tasks;
 
 namespace Bleff.ViewModels
 {
-    public interface iStartGame
+    public class StartGameVM
     {
-        StartingAction StartedActionSelected { get; set; }
-        string PlayerName { get; set; }
+        public StartingAction StartedActionSelected { get; set; }
+        public string PlayerName { get; set; }
+        public int GameId { get; set; }
     }
 }

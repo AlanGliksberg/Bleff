@@ -137,10 +137,8 @@
     <Compile Include="Models\Player.cs" />
     <Compile Include="Models\StartingAction.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="ViewModels\JoinGameVM.cs" />
     <Compile Include="ViewModels\GameVM.cs" />
-    <Compile Include="ViewModels\iStartGame.cs" />
-    <Compile Include="ViewModels\CreateGameVM.cs" />
+    <Compile Include="ViewModels\StartGameVM.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\bootstrap-theme.css" />
