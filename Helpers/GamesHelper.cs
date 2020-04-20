@@ -28,16 +28,6 @@ namespace Bleff.Helpers
 
         private static List<Player> _GetGamePlayers(Game game)
         {
-            if (game.Players == null)
-            {
-                lock (game._PlayersLock)
-                {
-                    if (game.Players == null)
-                    {
-                        game.Players = new List<Player>();
-                    }
-                }
-            }
             return game.Players;
         }
 
@@ -53,6 +43,26 @@ namespace Bleff.Helpers
                 var players = _GetGamePlayers(game);
                 players.Add(player);
             }
+        }
+
+        public static int GenerateGameID()
+        {
+            var random = new Random();
+            int newID;
+            bool newIdFound = false;
+
+            do
+            {
+                newID = random.Next(0, 100);
+                var games = _GetGames();
+                lock (_GamesLock)
+                {
+                    newIdFound = !games.Any(g => g.Id == newID);
+                }
+
+            } while (!newIdFound);
+
+            return newID;
         }
     }
 }

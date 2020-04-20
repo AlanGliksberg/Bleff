@@ -7,6 +7,15 @@ namespace Bleff.Models
 {
     public class Game
     {
+        public Game(Player liderPlayer)
+        {
+            Id = Helpers.GamesHelper.GenerateGameID();
+            Players = new List<Player>()
+            {
+                liderPlayer
+            };
+        }
+
         public object _PlayersLock = new object();
 
         public GameState State { get; set; }

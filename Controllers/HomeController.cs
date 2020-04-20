@@ -26,11 +26,20 @@ namespace Bleff.Controllers
         [HttpPost]
         public ActionResult Index(StartGameVM startGameVM)
         {
-            var player = new Player(startGameVM.PlayerName);
-            Session.Set(Keys.PlayerKeys.Player, player);
+            Player player;
 
-
-            return RedirectToAction("join-game-init", "game", new { gameID = startGameVM.GameId });
+            if (startGameVM.StartedActionSelected == StartingAction.JoinGame)
+            {
+                player = new Player(startGameVM.PlayerName);
+                Session.Set(Keys.PlayerKeys.Player, player);
+                return RedirectToAction("join-game-init", "game", new { gameID = startGameVM.GameId });
+            }
+            else
+            {
+                player = new Player(startGameVM.PlayerName, true);
+                Session.Set(Keys.PlayerKeys.Player, player);
+                return RedirectToAction("create-game-init", "game");
+            }
         }
     }
 }

@@ -1,4 +1,5 @@
 ﻿using Bleff.CustomExtensions;
+using Bleff.Models;
 using Bleff.ViewModels;
 using System;
 using System.Collections.Generic;
@@ -10,6 +11,19 @@ namespace Bleff.Controllers
 {
     public class GameController : CustomController
     {
+        public ActionResult Create_Game_Init(int gameID)
+        {
+            var player = GetCurrentPlayer();
+            var newGame = new Game(player);
+
+            var gameVM = new GameVM();
+            gameVM.ActualGame = newGame;
+            gameVM.ActualPlayer = player;
+
+            Session.Set(Keys.GameKeys.ActualGame, gameVM);
+            return RedirectToAction("waiting-game");
+        }
+
         public ActionResult Join_Game_Init(int gameID)
         {
             var game = Helpers.GamesHelper.GetGameByID(gameID);
@@ -37,6 +51,8 @@ namespace Bleff.Controllers
             Helpers.GamesHelper.AddPlayerToGame(game, player);
 
             var gameVM = new GameVM();
+            gameVM.ActualGame = game;
+            gameVM.ActualPlayer = player;
 
             Session.Set(Keys.GameKeys.ActualGame, gameVM);
 
