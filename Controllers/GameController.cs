@@ -24,7 +24,7 @@ namespace Bleff.Controllers
             return RedirectToAction("waiting-game");
         }
 
-        public ActionResult Join_Game_Init(int gameID)
+        public ActionResult Join_Game_Init(string gameID)
         {
             var game = Helpers.GamesHelper.GetGameByID(gameID);
 

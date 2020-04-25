@@ -20,7 +20,7 @@ namespace Bleff.Models
         public object _PlayersLock = new object();
 
         public GameState State { get; set; }
-        public int Id { get; set; }
+        public string Id { get; set; }
         public List<Player> Players { get; set; }
     }
 }

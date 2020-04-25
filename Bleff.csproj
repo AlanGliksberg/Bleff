@@ -155,6 +155,7 @@
     <Compile Include="Keys\PlayerKeys.cs" />
     <Compile Include="Models\Game.cs" />
     <Compile Include="Models\GameState.cs" />
+    <Compile Include="Models\HubPlayer.cs" />
     <Compile Include="Models\Player.cs" />
     <Compile Include="Models\StartingAction.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

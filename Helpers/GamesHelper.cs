@@ -59,7 +59,7 @@ namespace Bleff.Helpers
             return newGame;
         }
 
-        public static Game GetGameByID(int id)
+        public static Game GetGameByID(string id)
         {
             return _GetGames().FirstOrDefault(g => g.Id == id);
         }
@@ -73,25 +73,34 @@ namespace Bleff.Helpers
             }
         }
 
-        public static int GenerateGameID()
+        public static void RemovePlayerFromGame(string playerID, string lobbyID)
+        {
+            var games = _GetGames();
+            lock (_GamesLock)
+            {
+                games.FirstOrDefault(l => l.Id == lobbyID).Players.RemoveAll(p => p.PlayerID == playerID);
+            }
+        }
+
+        public static string GenerateGameID()
         {
             var random = new Random();
             int newID;
             bool newIdFound = false;
 
+            var games = _GetGames();
             //TODO - improve performance
             do
             {
                 newID = random.Next(0, MAX_LOBBIES_COUNT);
-                var games = _GetGames();
                 lock (_GamesLock)
                 {
-                    newIdFound = !games.Any(g => g.Id == newID);
+                    newIdFound = !games.Any(g => g.Id == newID.ToString());
                 }
 
             } while (!newIdFound);
 
-            return newID;
+            return newID.ToString();
         }
     }
 }
