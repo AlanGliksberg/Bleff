@@ -12,20 +12,19 @@
     <table class="table table-striped table-dark">
         <thead>
             <tr>
-                <th scope="col" class="col-xs-1"></th>
-                <th scope="col" class="col-xs-3">Jugadores</th>
+                <th scope="col" class="col-xs-4 text-center">Jugadores</th>
+                <th scope="col" class="col-xs-1 text-center"></th>
             </tr>
         </thead>
         <tbody id="playersTable">
-            @for (int i = 0; i < Model.ActualGame.Players.Count; i++)
+            @foreach (var player in Model.ActualGame.Players)
             {
-                var player = Model.ActualGame.Players[i];
-
-                <tr data-playerid="@Model.ActualGame.Players[i].PlayerID">
-                    <th scope="row" class="col-xs-1" data-position="@(i + 1)">@(i + 1)</th>
-                    <td class="col-xs-3">
+                <tr data-playerid="@player.PlayerID">
+                    <td class="col-xs-4 text-center">
                         @player.Name
 
+                    </td>
+                    <td class="col-xs-1 text-center">
                         @if (player.GameLider)
                         {
                             <span class="glyphicon glyphicon-star pull-right"></span>
@@ -61,12 +60,10 @@
                 playersConnected.push(playerID);
 
                 newPlayerHtml = '<tr data-playerid="' + playerID + '">\
-                                    <th scope="row" class="col-xs-1" data-position="%data-position%">%data-position%</th>\
-                                    <td class="col-xs-3">%data-playername%</td>\
+                                    <td class="col-xs-4 text-center">%data-playername%</td>\
                                 </tr>';
 
-                var lastPlayerPosition = $("#playersTable tr:last :first").data("position") + 1;
-                var newPlayer = $(newPlayerHtml.replace(/%data-position%/g, lastPlayerPosition).replace("%data-playername%", playerName));
+                var newPlayer = $(newPlayerHtml.replace("%data-playername%", playerName));
 
                 $("#playersTable").append(newPlayer);
             }
