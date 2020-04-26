@@ -1,9 +1,11 @@
 ﻿using Bleff.CustomExtensions;
 using Bleff.Models;
 using Bleff.ViewModels;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
 
@@ -88,6 +90,13 @@ namespace Bleff.Controllers
             gameVM.CheckedIn = true;
 
             return View(gameVM);
+        }
+
+        public async Task<JsonResult> GetRandomWord()
+        {
+            var response = await Helpers.ApiHelper.Get("http://www.poxet.com.ar/bleffonardo/palabra.php");
+
+            return Json(response, JsonRequestBehavior.AllowGet);
         }
     }
 }
