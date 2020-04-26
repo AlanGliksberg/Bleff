@@ -31,6 +31,12 @@ namespace Bleff.Hubs
         {
             return _PlayersConnected.FirstOrDefault(p => p.Key == connectionId).Value;
         }
+
+        private string _GetLobby(string connectionId)
+        {
+            return _GetPlayer(connectionId).LobbyID;
+        }
+
         private void _RemovePlayer(string connectionId)
         {
             _PlayersConnected.Remove(connectionId);
@@ -59,5 +65,10 @@ namespace Bleff.Hubs
             Helpers.GamesHelper.MakeNewLider(playerID, lobbyID);
         }
 
+        public void StartGame()
+        {
+            var lobby = _GetLobby(Context.ConnectionId);
+            Clients.Group(lobby).StartGame(lobby);
+        }
     }
 }

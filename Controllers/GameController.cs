@@ -72,5 +72,10 @@ namespace Bleff.Controllers
 
             return View(gameVM);
         }
+
+        public ActionResult Start_Game(string id)
+        {
+            return RedirectToAction("index", "home");
+        }
     }
 }
