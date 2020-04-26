@@ -99,6 +99,7 @@
             });
 
             lobby.client.startGame = function () {
+                $(window).unbind("unload");
                 window.location.href = "/game/start-game";
             }
 
