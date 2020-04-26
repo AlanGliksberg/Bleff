@@ -72,7 +72,9 @@ namespace Bleff.Helpers
             var games = _GetGames();
             lock (_GamesLock)
             {
-                games.FirstOrDefault(l => l.Id == lobbyID).Players.RemoveAll(p => p.PlayerID == playerID);
+                var game = games.FirstOrDefault(l => l.Id == lobbyID);
+                game.Players.RemoveAll(p => p.PlayerID == playerID);
+                if (game.Players.Count == 0) games.Remove(game);
             }
         }
 
@@ -81,7 +83,7 @@ namespace Bleff.Helpers
             var games = _GetGames();
             lock (_GamesLock)
             {
-                games.FirstOrDefault(g => g.Id == lobbyID).Players.FirstOrDefault(p => p.PlayerID == lobbyID).GameLider = true;
+                games.FirstOrDefault(g => g.Id == lobbyID).Players.FirstOrDefault(p => p.PlayerID == playerID).GameLider = true;
             }
         }
 
