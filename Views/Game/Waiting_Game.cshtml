@@ -21,7 +21,7 @@
             {
                 var player = Model.ActualGame.Players[i];
 
-                <tr>
+                <tr data-playerid="@Model.ActualGame.Players[i].PlayerID">
                     <th scope="row" class="col-xs-1" data-position="@(i + 1)">@(i + 1)</th>
                     <td class="col-xs-3">
                         @player.Name
@@ -41,6 +41,12 @@
 
     <script type="text/javascript">
 
+        var playersConnected = [];
+        @foreach (var player in Model.ActualGame.Players)
+        {
+            <text>playersConnected.push('@player.PlayerID');</text>
+        }
+
         $(document).ready(function () {
             var lobby = $.connection.lobbyHub;
 
@@ -48,27 +54,35 @@
                 lobby.server.addPlayer('@Model.ActualPlayer.Name', '@Model.ActualPlayer.PlayerID', '@Model.ActualGame.Id');
             });
 
-            lobby.client.addPlayer = function (playerName) {
-                if (playerName == '@Model.ActualPlayer.Name') return;
+            lobby.client.addPlayer = function (playerID, playerName) {
+                if (playerID == '@Model.ActualPlayer.PlayerID') return;
+                if (playersConnected.indexOf(playerID) != -1) return;
 
-                newPlayerHtml = '<tr>\
+                playersConnected.push(playerID);
+
+                newPlayerHtml = '<tr data-playerid="' + playerID + '">\
                                     <th scope="row" class="col-xs-1" data-position="%data-position%">%data-position%</th>\
                                     <td class="col-xs-3">%data-playername%</td>\
                                 </tr>';
 
                 var lastPlayerPosition = $("#playersTable tr:last :first").data("position") + 1;
                 var newPlayer = $(newPlayerHtml.replace(/%data-position%/g, lastPlayerPosition).replace("%data-playername%", playerName));
-                
+
                 $("#playersTable").append(newPlayer);
             }
 
-            lobby.client.removePlayer = function (playerID, isGameLider) {
-                alert(playerID, isGameLider);
+            lobby.client.removePlayer = function (playerID) {
+                console.log(playerID);
+                var playerIndex = playersConnected.indexOf(playerID)
+                if (playerIndex != -1) {
+                    $("tr[data-playerid='" + playerID + "']").remove();
+                    playersConnected.splice(playerIndex, 1);
+                }
             }
 
-            lobby.client.playerDisconnected = function (playerID) {
-                alert("disco - TODO");
-            }
+            $(window).on('unload', function () {
+                lobby.server.removePlayer();
+            });
         });
 
     </script>

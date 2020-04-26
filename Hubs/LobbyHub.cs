@@ -20,11 +20,12 @@ namespace Bleff.Hubs
         private void _AddPlayer(string connectionId, string playerID, string lobbyID)
         {
             if (_PlayersConnected == null) _PlayersConnected = new Dictionary<string, HubPlayer>();
-            _PlayersConnected.Add(connectionId, new HubPlayer()
-            {
-                LobbyID = lobbyID,
-                PlayerID = playerID
-            });
+            if (!_PlayersConnected.Any(p => p.Value.PlayerID == playerID))
+                _PlayersConnected.Add(connectionId, new HubPlayer()
+                {
+                    LobbyID = lobbyID,
+                    PlayerID = playerID
+                });
         }
         private HubPlayer _GetPlayer(string connectionId)
         {
@@ -34,25 +35,23 @@ namespace Bleff.Hubs
         {
             _PlayersConnected.Remove(connectionId);
         }
-        private void _RemovePlayerFromLobby(string playerID, string lobbyID)
-        {
-            Helpers.GamesHelper.RemovePlayerFromGame(playerID, lobbyID);
-        }
 
         public void AddPlayer(string playerName, string playerID, string lobbyID)
         {
             _AddPlayer(Context.ConnectionId, playerID, lobbyID);
             Groups.Add(Context.ConnectionId, lobbyID);
-            Clients.Group(lobbyID).AddPlayer(playerName);
+            Clients.Group(lobbyID).AddPlayer(playerID, playerName);
         }
 
-        public override Task OnDisconnected(bool stopCalled)
+        public void RemovePlayer()
         {
             var player = _GetPlayer(Context.ConnectionId);
             _RemovePlayer(Context.ConnectionId);
-            _RemovePlayerFromLobby(player.PlayerID, player.LobbyID);
-            Clients.Group(player.LobbyID).PlayerDisconnected(player.PlayerID);
-            return base.OnDisconnected(stopCalled);
+            if (player != null)
+            {
+                Helpers.GamesHelper.RemovePlayerFromGame(player.PlayerID, player.LobbyID);
+                Clients.Group(player.LobbyID).RemovePlayer(player.PlayerID);
+            }
         }
 
     }

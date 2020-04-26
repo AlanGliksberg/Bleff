@@ -63,6 +63,10 @@ namespace Bleff.Controllers
         {
             var gameVM = Session.Get<GameVM>(Keys.GameKeys.ActualGame);
 
+            if (gameVM == null || 
+                !gameVM.ActualGame.Players.Any(p => p.PlayerID == gameVM.ActualPlayer.PlayerID)) 
+                return RedirectToAction("index", "home");
+
             return View(gameVM);
         }
     }

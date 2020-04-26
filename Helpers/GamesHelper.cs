@@ -35,11 +35,6 @@ namespace Bleff.Helpers
             }
         }
 
-        private static List<Player> _GetGamePlayers(Game game)
-        {
-            return game.Players;
-        }
-
         private static bool _LobbiesFull()
         {
             lock (_GamesLock)
@@ -51,7 +46,7 @@ namespace Bleff.Helpers
         public static Game CreateNewGame(Player player)
         {
             if (_LobbiesFull())
-                throw new Exception("Lobbies are full");
+                throw new Exception("Lobbies are full"); //TODO handle error
 
             var newGame = new Game(player);
             _AddGameToList(newGame);
@@ -68,8 +63,7 @@ namespace Bleff.Helpers
         {
             lock (_GamesLock)
             {
-                var players = _GetGamePlayers(game);
-                players.Add(player);
+                game.Players.Add(player);
             }
         }
 
@@ -89,7 +83,7 @@ namespace Bleff.Helpers
             bool newIdFound = false;
 
             var games = _GetGames();
-            //TODO - improve performance
+            //TODO - improve performance with list of available lobbies
             do
             {
                 newID = random.Next(0, MAX_LOBBIES_COUNT);
