@@ -58,7 +58,7 @@
                     <h3 class="text-center">Elegí una palabra</h3>
                 </div>
                 <div class="col-xs-2">
-                    <h3 id="choseWordTimer" class="pull-reight"></h3>
+                    <h3 id="choseWordTimer" class="pull-right"></h3>
                 </div>
             </div>
             <div class="row">
@@ -72,6 +72,9 @@
                 <div id="divRerollWord" class="col-xs-2">
                     <button type="button" id="btnRerollWord" class="btn btn-primary">Buscar otra</button>
                 </div>
+            </div>
+            <div class="row" id="divStartRound">
+                <button type="button" id="asd" class="btn btn-primary">Empezar ronda con esta palabra</button>
             </div>
         }
         else
@@ -127,7 +130,7 @@
         });
 
         function setChoseWordInterval() {
-            var chosingTime = 45;
+            var chosingTime = 5;
             $("#choseWordTimer").text(chosingTime);
 
             var chosingTimer = setInterval(function () {
@@ -174,6 +177,10 @@
 
         #divRerollWord {
             padding-top: 78px;
+        }
+
+        #divStartRound {
+            margin-top: 20px;
         }
     </style>
 }
