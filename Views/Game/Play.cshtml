@@ -29,9 +29,24 @@
                             <span class="glyphicon glyphicon-star-empty pull-left"></span>
                         }
                         <span>@player.Name</span>
+                        @if (player.PlayerID == Model.ActualGame.ActualCoordinator.PlayerID)
+                        {
+                            <span class="glyphicon glyphicon-pencil pull-right"></span>
+                        }
                     </td>
                 </tr>
             }
         </tbody>
     </table>
 </div>
+
+@section Scripts{
+    <script type="text/javascript">
+    </script>
+
+    <style type="text/css">
+        .glyphicon.glyphicon-pencil{
+            color: red;
+        }
+    </style>
+}
