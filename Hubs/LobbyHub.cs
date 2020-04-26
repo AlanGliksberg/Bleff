@@ -68,7 +68,7 @@ namespace Bleff.Hubs
         public void StartGame()
         {
             var lobby = _GetLobby(Context.ConnectionId);
-            Clients.Group(lobby).StartGame(lobby);
+            Clients.Group(lobby).StartGame();
         }
     }
 }

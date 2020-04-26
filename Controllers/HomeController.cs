@@ -17,7 +17,6 @@ namespace Bleff.Controllers
             //validar no encontro game
             //var gameSearchFailed = TempData[Keys.TempDataKeys.GameSearchFailed]
             //var GameStarted = TempData[Keys.TempDataKeys.GameStarted]
-            //var GameOver = TempData[Keys.TempDataKeys.GameOver]
             Session.Set(Keys.PlayerKeys.Player, null);
 
             return View();

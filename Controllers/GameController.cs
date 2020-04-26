@@ -40,12 +40,6 @@ namespace Bleff.Controllers
                 return RedirectToAction("index", "home");
             }
 
-            if (game.State == GameState.Over)
-            {
-                TempData[Keys.TempDataKeys.GameOver] = true;
-                return RedirectToAction("index", "home");
-            }
-
             var player = GetCurrentPlayer();
 
             Helpers.GamesHelper.AddPlayerToGame(game, player);
@@ -73,9 +67,25 @@ namespace Bleff.Controllers
             return View(gameVM);
         }
 
-        public ActionResult Start_Game(string id)
+        public ActionResult Start_Game()
         {
-            return RedirectToAction("index", "home");
+            var gameVM = Session.Get<GameVM>(Keys.GameKeys.ActualGame);
+            gameVM.CheckedIn = false;
+            Helpers.GamesHelper.StartGame(gameVM.ActualGame.Id);
+
+            return RedirectToAction("play");
+        }
+
+        public ActionResult Play()
+        {
+            var gameVM = Session.Get<GameVM>(Keys.GameKeys.ActualGame);
+
+            if (gameVM == null ||
+                gameVM.CheckedIn ||
+                !gameVM.ActualGame.Players.Any(p => p.PlayerID == gameVM.ActualPlayer.PlayerID))
+                return RedirectToAction("index", "home");
+
+            return View(gameVM);
         }
     }
 }

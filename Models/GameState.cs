@@ -8,7 +8,6 @@ namespace Bleff.Models
     public enum GameState
     {
         Waiting,
-        Started,
-        Over
+        Started
     }
 }

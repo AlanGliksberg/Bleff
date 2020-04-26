@@ -9,7 +9,6 @@ namespace Bleff.Keys
     {
         public const string GameSearchFailed = "GameSearchFailed";
         public const string GameStarted = "GameStarted";
-        public const string GameOver = "GameOver";
 
     }
 }

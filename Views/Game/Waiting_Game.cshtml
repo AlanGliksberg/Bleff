@@ -10,7 +10,7 @@
     <div class="col-xs-10">
         <p class="lead">BLEFF - Sala @Model.ActualGame.Id</p>
     </div>
-    <button type="button" id="btnStartGame" class="btn btn-primary @btnDisabled" @btnDisabled ">Empezar Partida</button>
+    <button type="button" id="btnStartGame" class="btn btn-primary @btnDisabled" @btnDisabled>Empezar Partida</button>
 </div>
 
 <div class="col-xs-4">
@@ -98,8 +98,8 @@
                 lobby.server.startGame();
             });
 
-            lobby.client.startGame = function (gameID) {
-                window.location.href = "/game/start-game/" + gameID;
+            lobby.client.startGame = function () {
+                window.location.href = "/game/start-game";
             }
 
             $(window).on('unload', function () {
