@@ -13,7 +13,7 @@ namespace Bleff.Hubs
     {
         /// <summary>
         /// Key: connectionID
-        /// Pair: playerID
+        /// Pair: HubPlayer (PlayerID, LobbyID)
         /// </summary>
         private static Dictionary<string, HubPlayer> _PlayersConnected { get; set; }
 
@@ -52,6 +52,11 @@ namespace Bleff.Hubs
                 Helpers.GamesHelper.RemovePlayerFromGame(player.PlayerID, player.LobbyID);
                 Clients.Group(player.LobbyID).RemovePlayer(player.PlayerID);
             }
+        }
+
+        public void NewLider(string playerID, string lobbyID)
+        {
+            Helpers.GamesHelper.MakeNewLider(playerID, lobbyID);
         }
 
     }

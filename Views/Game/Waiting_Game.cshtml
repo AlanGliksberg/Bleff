@@ -37,7 +37,6 @@
 </div>
 
 @section Scripts{
-
     <script type="text/javascript">
 
         var playersConnected = [];
@@ -61,6 +60,7 @@
 
                 newPlayerHtml = '<tr data-playerid="' + playerID + '">\
                                     <td class="col-xs-4 text-center">%data-playername%</td>\
+                                    <td class="col-xs-1 text-center"></td>\
                                 </tr>';
 
                 var newPlayer = $(newPlayerHtml.replace("%data-playername%", playerName));
@@ -69,10 +69,20 @@
             }
 
             lobby.client.removePlayer = function (playerID) {
-                var playerIndex = playersConnected.indexOf(playerID)
+                var playerIndex = playersConnected.indexOf(playerID);
+
+                var wasLider = !!$("tr[data-playerid='" + playerID + "'] td:last-child>span").length;
+
                 if (playerIndex != -1) {
                     $("tr[data-playerid='" + playerID + "']").remove();
                     playersConnected.splice(playerIndex, 1);
+
+                    if (wasLider) {
+                        $("tr:first-child td:last-child").append('<span class="glyphicon glyphicon-star pull-right"></span>');
+                        lobby.server.newLider($("tr:first-child").data("playerid"), '@Model.ActualGame.Id');
+
+                        //give lider privilegies
+                    }
                 }
             }
 

@@ -76,6 +76,15 @@ namespace Bleff.Helpers
             }
         }
 
+        public static void MakeNewLider(string playerID, string lobbyID)
+        {
+            var games = _GetGames();
+            lock (_GamesLock)
+            {
+                games.FirstOrDefault(g => g.Id == lobbyID).Players.FirstOrDefault(p => p.PlayerID == lobbyID).GameLider = true;
+            }
+        }
+
         public static string GenerateGameID()
         {
             var random = new Random();
