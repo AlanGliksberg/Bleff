@@ -85,6 +85,8 @@ namespace Bleff.Controllers
                 !gameVM.ActualGame.Players.Any(p => p.PlayerID == gameVM.ActualPlayer.PlayerID))
                 return RedirectToAction("index", "home");
 
+            gameVM.CheckedIn = true;
+
             return View(gameVM);
         }
     }
