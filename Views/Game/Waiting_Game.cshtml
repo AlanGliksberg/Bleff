@@ -72,7 +72,6 @@
             }
 
             lobby.client.removePlayer = function (playerID) {
-                console.log(playerID);
                 var playerIndex = playersConnected.indexOf(playerID)
                 if (playerIndex != -1) {
                     $("tr[data-playerid='" + playerID + "']").remove();
