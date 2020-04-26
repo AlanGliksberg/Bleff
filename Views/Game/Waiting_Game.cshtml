@@ -2,10 +2,15 @@
 
 @{
     Layout = "~/Views/Shared/_Layout.cshtml";
+
+    var btnDisabled = Model.ActualPlayer.GameLider ? String.Empty : "disabled";
 }
 
 <div class="jumbotron">
-    <p class="lead">BLEFF - Sala @Model.ActualGame.Id</p>
+    <div class="col-xs-10">
+        <p class="lead">BLEFF - Sala @Model.ActualGame.Id</p>
+    </div>
+    <button type="button" id="btnStartGame" class="btn btn-primary @btnDisabled" @btnDisabled>Empezar Partida</button>
 </div>
 
 <div class="col-xs-4">
@@ -79,9 +84,12 @@
 
                     if (wasLider) {
                         $("tr:first-child td:last-child").append('<span class="glyphicon glyphicon-star pull-right"></span>');
-                        lobby.server.newLider($("tr:first-child").data("playerid"), '@Model.ActualGame.Id');
+                        var newLiderId = $("tbody>tr:first-child").data("playerid");
+                        lobby.server.newLider(newLiderId, '@Model.ActualGame.Id');
 
-                        //give lider privilegies
+                        if (newLiderId == '@Model.ActualPlayer.PlayerID') {
+                            $("#btnStartGame").removeClass("disabled").removeAttr("disabled");
+                        }
                     }
                 }
             }
