@@ -87,6 +87,32 @@ namespace Bleff.Helpers
             }
         }
 
+        public static void SelectCoordinator(string lobbyID)
+        {
+            var games = _GetGames();
+            lock (_GamesLock)
+            {
+                var game = games.FirstOrDefault(g => g.Id == lobbyID);
+                try
+                {
+                    if (game.ActualCoordinator == null)
+                        game.ActualCoordinator = game.Players.First();
+                    else
+                    {
+                        var nextCoordinatorIndex = game.Players.IndexOf(game.ActualCoordinator);
+                        if (nextCoordinatorIndex >= game.Players.Count)
+                            game.ActualCoordinator = game.Players.First();
+                        else
+                            game.ActualCoordinator = game.Players[nextCoordinatorIndex];
+                    }
+                }
+                catch (Exception)
+                {
+                    game.ActualCoordinator = game.Players.First();
+                }
+            }
+        }
+
         public static void StartGame(string lobbyID)
         {
             var games = _GetGames();
@@ -94,6 +120,8 @@ namespace Bleff.Helpers
             {
                 games.FirstOrDefault(g => g.Id == lobbyID).State = GameState.Started;
             }
+
+            SelectCoordinator(lobbyID);
         }
 
         public static string GenerateGameID()

@@ -49,10 +49,7 @@
 
 <script type="text/javascript">
     $(document).ready(function () {
-        @if(((bool?)TempData[Bleff.Keys.TempDataKeys.GameOver]).HasValue && ((bool?)TempData[Bleff.Keys.TempDataKeys.GameOver]).Value)
-        {
-            <text>showSimpleModal("Aviso", "El juego buscado ya terminó");</text>
-        }else if(((bool?)TempData[Bleff.Keys.TempDataKeys.GameSearchFailed]).HasValue && ((bool?)TempData[Bleff.Keys.TempDataKeys.GameSearchFailed]).Value)
+        @if(((bool?)TempData[Bleff.Keys.TempDataKeys.GameSearchFailed]).HasValue && ((bool?)TempData[Bleff.Keys.TempDataKeys.GameSearchFailed]).Value)
         {
             <text>showSimpleModal("Aviso", "El juego buscado no se encontró");</text>
         }else if(((bool?)TempData[Bleff.Keys.TempDataKeys.GameStarted]).HasValue && ((bool?)TempData[Bleff.Keys.TempDataKeys.GameStarted]).Value)

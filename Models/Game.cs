@@ -22,5 +22,7 @@ namespace Bleff.Models
         public GameState State { get; set; }
         public string Id { get; set; }
         public List<Player> Players { get; set; }
+
+        public Player ActualCoordinator { get; set; }
     }
 }
