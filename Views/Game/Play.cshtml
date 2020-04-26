@@ -16,7 +16,8 @@
             <thead>
                 <tr>
                     <th scope="col" class="col-xs-2 text-center">Puntaje</th>
-                    <th scope="col" class="col-xs-10 text-center">Jugadores</th>
+                    <th scope="col" class="col-xs-1 text-center"></th>
+                    <th scope="col" class="col-xs-9 text-center">Jugadores</th>
                 </tr>
             </thead>
             <tbody id="playersTable">
@@ -24,11 +25,17 @@
                 {
                     <tr data-playerid="@player.PlayerID">
                         <td class="col-xs-2 text-center">0</td>
-                        <td class="col-xs-10 text-center">
+                        <td class="col-xs-1 text-center">
                             @if (player.PlayerID == Model.ActualPlayer.PlayerID)
                             {
-                                <span class="glyphicon glyphicon-star-empty pull-left"></span>
+                                <span class="glyphicon glyphicon-star-empty pull-left col-xs-1"></span>
                             }
+                            else
+                            {
+                                <span class="col-xs-1"></span>
+                            }
+                        </td>
+                        <td class="col-xs-10 text-center">
                             <span style="overflow: hidden">@player.Name</span>
                             @if (player.PlayerID == Model.ActualGame.ActualCoordinator.PlayerID)
                             {
@@ -44,35 +51,39 @@
     <div class="col-xs-1"></div>
 
     <div class="col-xs-7">
-        @foreach (var player in Model.ActualGame.Players)
+        @if (Model.ActualPlayer.PlayerID == Model.ActualGame.ActualCoordinator.PlayerID)
         {
-            if (player.PlayerID == Model.ActualGame.ActualCoordinator.PlayerID)
-            {
-                <div class="row">
-                    <div class="col-xs-10">
-                        <h3 class="text-center">Elegí una palabra</h3>
-                    </div>
-                    <div class="col-xs-2">
-                        <h3 id="choseWordTimer" class="pull-reight"></h3>
+            <div class="row">
+                <div class="col-xs-10">
+                    <h3 class="text-center">Elegí una palabra</h3>
+                </div>
+                <div class="col-xs-2">
+                    <h3 id="choseWordTimer" class="pull-reight"></h3>
+                </div>
+            </div>
+            <div class="row">
+                <div id="choseWordSection" class="col-xs-10 chose-word-section">
+                    <div id="chosenWord" class="chosen-word row text-center"></div>
+                    <div class="definition-section pull-left col-xs-12 row">
+                        <b>Definición: </b>
+                        <span id="definition"></span>
                     </div>
                 </div>
-                <div class="row">
-                    <div id="choseWordSection" class="col-xs-10 chose-word-section">
-                        <div id="chosenWord" class="chosen-word row text-center"></div>
-                        <div class="definition-section pull-left col-xs-12 row">
-                            <b>Definición: </b>
-                            <span id="definition"></span>
-                        </div>
-                    </div>
-                    <div id="divRerollWord" class="col-xs-2">
-                        <button type="button" id="btnRerollWord" class="btn btn-primary">Buscar otra</button>
-                    </div>
+                <div id="divRerollWord" class="col-xs-2">
+                    <button type="button" id="btnRerollWord" class="btn btn-primary">Buscar otra</button>
                 </div>
-            }
-            else
-            {
-
-            }
+            </div>
+        }
+        else
+        {
+            <div class="row">
+                <div class="col-xs-10">
+                    <h3 class="text-center"><b>@Model.ActualGame.ActualCoordinator.Name</b> está eligiendo una palabra</h3>
+                </div>
+                <div class="col-xs-2">
+                    <h3 id="choseWordTimer" class="pull-reight"></h3>
+                </div>
+            </div>
         }
     </div>
 
@@ -85,6 +96,7 @@
 @section Scripts{
     <script type="text/javascript">
         var pencil = '<span id="pencil" class="glyphicon glyphicon-pencil pull-right"></span>';
+        var isCoordinator = @((Model.ActualPlayer.PlayerID == Model.ActualGame.ActualCoordinator.PlayerID).ToString().ToLower());
 
         function choseRandomWord() {
             $.ajax({
@@ -97,6 +109,7 @@
                     var palabra = $("#aux h1").text();
                     $("#chosenWord").text(palabra);
                     var definicion = $("#definiciones>button:first").text();
+                    definicion = definicion.replace("[", "").replace("]", "");
                     $("#definition").text(definicion);
                     $("#aux").text("");
                 }
@@ -109,7 +122,31 @@
             $("#btnRerollWord").click(function () {
                 choseRandomWord();
             });
+
+            setChoseWordInterval();
         });
+
+        function setChoseWordInterval() {
+            var chosingTime = 45;
+            $("#choseWordTimer").text(chosingTime);
+
+            var chosingTimer = setInterval(function () {
+                var newTime = $("#choseWordTimer").text() - 1;
+
+                if (newTime <= 0) {
+                    clearInterval(chosingTimer);
+                    if (isCoordinator) {
+                        selectWordAndStartRound();
+                    }
+                }
+
+                $("#choseWordTimer").text(newTime);
+            }, 1000);
+        }
+
+        function selectWordAndStartRound() {
+
+        }
     </script>
 
     <style type="text/css">
