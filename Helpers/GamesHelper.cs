@@ -113,6 +113,16 @@ namespace Bleff.Helpers
             }
         }
 
+        internal static void SetSelectWord(string lobbyID, string word, string definition)
+        {
+            var games = _GetGames();
+            lock (_GamesLock)
+            {
+                games.FirstOrDefault(g => g.Id == lobbyID).SelectedWord = word;
+                games.FirstOrDefault(g => g.Id == lobbyID).SelectedDefinition = definition;
+            }
+        }
+
         public static void StartGame(string lobbyID)
         {
             var games = _GetGames();

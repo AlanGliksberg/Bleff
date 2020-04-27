@@ -24,5 +24,7 @@ namespace Bleff.Models
         public List<Player> Players { get; set; }
 
         public Player ActualCoordinator { get; set; }
+        public string SelectedWord { get; set; }
+        public string SelectedDefinition { get; set; }
     }
 }

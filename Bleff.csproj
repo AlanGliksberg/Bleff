@@ -165,6 +165,7 @@
     </Compile>
     <Compile Include="Helpers\ApiHelper.cs" />
     <Compile Include="Helpers\GamesHelper.cs" />
+    <Compile Include="Hubs\GameHub.cs" />
     <Compile Include="Hubs\LobbyHub.cs" />
     <Compile Include="Hubs\Startup.cs" />
     <Compile Include="Keys\GameKeys.cs" />

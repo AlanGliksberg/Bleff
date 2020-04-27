@@ -1,15 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 using System.Web;
-using Bleff.CustomExtensions;
 using Bleff.Models;
 using Microsoft.AspNet.SignalR;
 
 namespace Bleff.Hubs
 {
-    public class LobbyHub : Hub
+    public class GameHub : Hub
     {
         /// <summary>
         /// Key: connectionID
@@ -32,6 +30,7 @@ namespace Bleff.Hubs
                     });
             }
         }
+
         public HubPlayer _GetPlayer(string connectionId)
         {
             lock (_LockPlayers)
@@ -55,34 +54,17 @@ namespace Bleff.Hubs
                 _PlayersConnected.Remove(connectionId);
             }
         }
-
-        public void AddPlayer(string playerName, string playerID, string lobbyID)
+        public void LoadLobbyData(string lobbyID, string playerID)
         {
             _AddPlayer(Context.ConnectionId, playerID, lobbyID);
             Groups.Add(Context.ConnectionId, lobbyID);
-            Clients.Group(lobbyID).AddPlayer(playerID, playerName);
         }
 
-        public void RemovePlayer()
-        {
-            var player = _GetPlayer(Context.ConnectionId);
-            _RemovePlayer(Context.ConnectionId);
-            if (player != null)
-            {
-                Helpers.GamesHelper.RemovePlayerFromGame(player.PlayerID, player.LobbyID);
-                Clients.Group(player.LobbyID).RemovePlayer(player.PlayerID);
-            }
-        }
-
-        public void NewLider(string playerID, string lobbyID)
-        {
-            Helpers.GamesHelper.MakeNewLider(playerID, lobbyID);
-        }
-
-        public void StartGame()
+        public void StartRound(string word, string definition)
         {
             var lobby = _GetLobby(Context.ConnectionId);
-            Clients.Group(lobby).StartGame();
+            Helpers.GamesHelper.SetSelectWord(lobby, word, definition);
+            Clients.Group(lobby).StartRound(word);
         }
     }
 }

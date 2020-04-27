@@ -74,7 +74,7 @@
                 </div>
             </div>
             <div class="row" id="divStartRound">
-                <button type="button" id="asd" class="btn btn-primary">Empezar ronda con esta palabra</button>
+                <button type="button" id="btnStartRound" class="btn btn-primary">Empezar ronda con esta palabra</button>
             </div>
         }
         else
@@ -120,36 +120,51 @@
         }
 
         $(document).ready(function () {
+            var lobby = $.connection.gameHub;
+            $.connection.hub.start().done(function () {
+                lobby.server.loadLobbyData('@Model.ActualGame.Id', '@Model.ActualPlayer.PlayerID');
+            });
+
             choseRandomWord();
+            setChoseWordInterval();
+
+            lobby.client.startRound = function (word) {
+                alert(word);
+            }
 
             $("#btnRerollWord").click(function () {
                 choseRandomWord();
             });
 
-            setChoseWordInterval();
+            function setChoseWordInterval() {
+                var chosingTime = 45;
+                $("#choseWordTimer").text(chosingTime);
+
+                var chosingTimer = setInterval(function () {
+                    var newTime = $("#choseWordTimer").text() - 1;
+
+                    if (newTime <= 0) {
+                        clearInterval(chosingTimer);
+                        if (isCoordinator) {
+                            selectWordAndStartRound();
+                        }
+                    }
+
+                    $("#choseWordTimer").text(newTime);
+                }, 1000);
+            }
+
+            $("#btnStartRound").click(function () {
+                selectWordAndStartRound();
+            });
+
+            function selectWordAndStartRound() {
+                var word = $("#chosenWord").text();
+                var definition = $("#definition").text();
+                lobby.server.startRound(word, definition);
+            }
         });
 
-        function setChoseWordInterval() {
-            var chosingTime = 45;
-            $("#choseWordTimer").text(chosingTime);
-
-            var chosingTimer = setInterval(function () {
-                var newTime = $("#choseWordTimer").text() - 1;
-
-                if (newTime <= 0) {
-                    clearInterval(chosingTimer);
-                    if (isCoordinator) {
-                        selectWordAndStartRound();
-                    }
-                }
-
-                $("#choseWordTimer").text(newTime);
-            }, 1000);
-        }
-
-        function selectWordAndStartRound() {
-
-        }
     </script>
 
     <style type="text/css">
