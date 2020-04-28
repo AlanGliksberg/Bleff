@@ -108,7 +108,7 @@
                 contentType: "application/json",
                 dataType: "json",
                 success: function (data) {
-                    $("#aux").append(data)
+                    $("#aux").append(data.substring(0, data.length - 200).slice(990))
                     var palabra = $("#aux h1").text();
                     $("#chosenWord").text(palabra);
                     var definicion = $("#definiciones>button:first").text();
