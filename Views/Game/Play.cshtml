@@ -188,13 +188,13 @@
                 var timer = setInterval(function () {
                     var newTime = $(selector).text() - 1;
 
-                    if (newTime <= 0) {
+                    if (newTime < 0) {
                         clearInterval(timer);
                         if (onTimeEnd)
                             onTimeEnd();
+                    } else {
+                        $(selector).text(newTime);
                     }
-
-                    $(selector).text(newTime);
                 }, 1000);
             }
 
