@@ -136,8 +136,6 @@
                 } else {
                     LoadDefinition(word);
                 }
-
-                setTimer(60, "#createDefsTimer", null);
             }
 
             function waitForDefinitions(word) {
@@ -156,10 +154,32 @@
                             </div>';
 
                 $("#gameBoard").append(html.replace("%data-word%", word));
+
+                setTimer(60, "#createDefsTimer", null);
             }
 
             function LoadDefinition(word) {
-                alert(word)
+                var html = '<div class="row">\
+                                <div class="col-xs-10">\
+                                    <h3 class="text-center"><b><i>%data-word%</i></b></h3>\
+                                </div >\
+                            </div >\
+                            <div class="row" >\
+                                <div class="col-xs-10">\
+                                <h3 class="text-center">Creá tu definición</h3>\
+                            </div >\
+                                <div class="col-xs-2">\
+                                <h3 id="createDefsTimer" class="pull-right"></h3>\
+                                </div>\
+                            </div>';
+
+                $("#gameBoard").append(html.replace("%data-word%", word));
+
+                setTimer(60, "#createDefsTimer", loadDefinition);
+            }
+
+            function loadDefinition() {
+
             }
 
             $("#btnRerollWord").click(function () {
