@@ -10,7 +10,7 @@
     <div class="col-xs-10">
         <p class="lead">BLEFF - Sala @Model.ActualGame.Id</p>
     </div>
-    <button type="button" id="btnStartGame" class="btn btn-primary @btnDisabled" @btnDisabled>Empezar Partida</button>
+    <button type="button" id="btnStartGame" class="btn btn-primary @btnDisabled">Empezar Partida</button>
 </div>
 
 <div class="col-xs-4">
@@ -55,6 +55,7 @@
 
             $.connection.hub.start().done(function () {
                 lobby.server.addPlayer('@Model.ActualPlayer.Name', '@Model.ActualPlayer.PlayerID', '@Model.ActualGame.Id');
+                $("#btnStartGame").addClass('@btnDisabled');
             });
 
             lobby.client.addPlayer = function (playerID, playerName) {
@@ -100,7 +101,6 @@
 
             lobby.client.startGame = function () {
                 $(window).unbind("unload");
-                $.connection.hub.stop();
                 window.location.href = "/game/start-game";
             }
 
