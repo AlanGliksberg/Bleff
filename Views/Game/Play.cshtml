@@ -50,7 +50,7 @@
 
     <div class="col-xs-1"></div>
 
-    <div class="col-xs-7">
+    <div class="col-xs-7" id="gameBoard">
         @if (Model.ActualPlayer.PlayerID == Model.ActualGame.ActualCoordinator.PlayerID)
         {
             <div class="row">
@@ -92,9 +92,8 @@
 
 </div>
 
-<div id="aux" class="hidden">
+<div id="aux" class="hidden"></div>
 
-</div>
 
 @section Scripts{
     <script type="text/javascript">
@@ -111,10 +110,10 @@
                     $("#aux").append(data.substring(0, data.length - 200).slice(990))
                     var palabra = $("#aux h1").text();
                     $("#chosenWord").text(palabra);
-                    var definicion = $("#definiciones>button:first").text();
-                    definicion = definicion.replace("[", "").replace("]", "");
-                    $("#definition").text(definicion);
-                    $("#aux").text("");
+                    var definition = $("#definiciones>button:first").text();
+                    definition = definition.replace("[", "").replace("]", "");
+                    $("#definition").text(definition);
+                    $("#aux").empty();
                 }
             });
         }
@@ -126,31 +125,54 @@
             });
 
             choseRandomWord();
-            setChoseWordInterval();
+            setTimer(45, "#choseWordTimer", isCoordinator ? selectWordAndStartRound : null);
 
             lobby.client.startRound = function (word) {
-                alert(word);
+                $("#gameBoard").empty();
+
+                if (isCoordinator) {
+                    waitForDefinitions(word);
+                } else {
+                    LoadDefinition(word);
+                }
+
+                setTimer(60, "#createDefsTimer", null);
+            }
+
+            function waitForDefinitions() {
+                var html = '<div class="row">\
+                                <div class="col-xs-10">\
+                                <h3 class="text-center">Los jugadores están creando sus definiciones...</h3>\
+                            </div >\
+                                <div class="col-xs-2">\
+                                <h3 id="createDefsTimer" class="pull-right"></h3>\
+                                </div>\
+                            </div>';
+
+                $("#gameBoard").append(html);
+            }
+
+            function LoadDefinition(word) {
+                alert(word)
             }
 
             $("#btnRerollWord").click(function () {
                 choseRandomWord();
             });
 
-            function setChoseWordInterval() {
-                var chosingTime = 45;
-                $("#choseWordTimer").text(chosingTime);
+            function setTimer(time, selector, onTimeEnd) {
+                $(selector).text(time);
 
-                var chosingTimer = setInterval(function () {
-                    var newTime = $("#choseWordTimer").text() - 1;
+                var timer = setInterval(function () {
+                    var newTime = $(selector).text() - 1;
 
                     if (newTime <= 0) {
-                        clearInterval(chosingTimer);
-                        if (isCoordinator) {
-                            selectWordAndStartRound();
-                        }
+                        clearInterval(timer);
+                        if (onTimeEnd)
+                            onTimeEnd();
                     }
 
-                    $("#choseWordTimer").text(newTime);
+                    $(selector).text(newTime);
                 }, 1000);
             }
 
