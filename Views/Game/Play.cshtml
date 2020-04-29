@@ -17,7 +17,8 @@
                 <tr>
                     <th scope="col" class="col-xs-2 text-center">Puntaje</th>
                     <th scope="col" class="col-xs-1 text-center"></th>
-                    <th scope="col" class="col-xs-9 text-center">Jugadores</th>
+                    <th scope="col" class="col-xs-8 text-center">Jugadores</th>
+                    <th scope="col" class="col-xs-1 text-center"></th>
                 </tr>
             </thead>
             <tbody id="playersTable">
@@ -31,8 +32,14 @@
                                 <span class="glyphicon glyphicon-star-empty pull-left col-xs-1"></span>
                             }
                         </td>
-                        <td class="col-xs-9 text-center">
+                        <td class="col-xs-8 text-center">
                             <span style="overflow: hidden">@player.Name</span>
+                            @if (player.PlayerID == Model.ActualGame.ActualCoordinator.PlayerID)
+                            {
+                                <span id="pencil" class="glyphicon glyphicon-pencil pull-right"></span>
+                            }
+                        </td>
+                        <td class="col-xs-1 text-center">
                             @if (player.PlayerID == Model.ActualGame.ActualCoordinator.PlayerID)
                             {
                                 <span id="pencil" class="glyphicon glyphicon-pencil pull-right"></span>
