@@ -99,7 +99,7 @@
         var pencil = '<span id="pencil" class="glyphicon glyphicon-pencil pull-right"></span>';
         var isCoordinator = @((Model.ActualPlayer.PlayerID == Model.ActualGame.ActualCoordinator.PlayerID).ToString().ToLower());
 
-        function choseRandomWord() {
+        function getRandomWord() {
             $.ajax({
                 type: "GET",
                 url: "/game/GetRandomWord",
@@ -120,16 +120,14 @@
         $(document).ready(function () {
             var game = $.connection.gameHub;
             $.connection.hub.start().done(function () {
-                game.server.loadLobbyData('@Model.ActualGame.Id', '@Model.ActualPlayer.PlayerID');
+                game.server.loadGameData('@Model.ActualGame.Id', '@Model.ActualPlayer.PlayerID');
             });
 
-            choseRandomWord();
+            getRandomWord();
             setTimer(45, "#choseWordTimer", isCoordinator ? selectWordAndStartRound : null);
 
             game.client.startRound = function (word) {
-                if (!word) return;
                 $("#gameBoard").empty();
-
                 if (isCoordinator) {
                     waitForDefinitions(word);
                 } else {
@@ -191,7 +189,7 @@
             }
 
             $("#btnRerollWord").click(function () {
-                choseRandomWord();
+                getRandomWord();
             });
 
             function setTimer(time, selector, onTimeEnd) {
@@ -225,7 +223,6 @@
             });
 
             game.client.removePlayer = function (playerID) {
-                alert("remove")
                 $("tr[data-playerid='" + playerID + "']").remove();
             }
         });

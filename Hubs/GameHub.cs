@@ -54,7 +54,7 @@ namespace Bleff.Hubs
                 _PlayersConnected.Remove(connectionId);
             }
         }
-        public void LoadLobbyData(string lobbyID, string playerID)
+        public void LoadGameData(string lobbyID, string playerID)
         {
             _AddPlayer(Context.ConnectionId, playerID, lobbyID);
             Groups.Add(Context.ConnectionId, lobbyID);
@@ -72,6 +72,8 @@ namespace Bleff.Hubs
 
         public void StartRound(string word, string definition)
         {
+            if (String.IsNullOrEmpty(word) || String.IsNullOrEmpty(definition)) return;
+
             var player = _GetPlayer(Context.ConnectionId);
             Helpers.GamesHelper.SetSelectedWord(player.LobbyID, player.PlayerID, word, definition);
             Clients.Group(player.LobbyID).StartRound(word);
