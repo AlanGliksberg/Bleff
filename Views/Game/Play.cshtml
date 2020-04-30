@@ -118,15 +118,15 @@
         }
 
         $(document).ready(function () {
-            var lobby = $.connection.gameHub;
+            var game = $.connection.gameHub;
             $.connection.hub.start().done(function () {
-                lobby.server.loadLobbyData('@Model.ActualGame.Id', '@Model.ActualPlayer.PlayerID');
+                game.server.loadLobbyData('@Model.ActualGame.Id', '@Model.ActualPlayer.PlayerID');
             });
 
             choseRandomWord();
             setTimer(45, "#choseWordTimer", isCoordinator ? selectWordAndStartRound : null);
 
-            lobby.client.startRound = function (word) {
+            game.client.startRound = function (word) {
                 if (!word) return;
                 $("#gameBoard").empty();
 
@@ -174,15 +174,20 @@
                             <div class="definition-section col-xs-12 row">\
                                 <label for="createdDef">Definición:</label>\
                                 <textarea class="form-control" rows="3" id="createdDef" style="max-width: none; resize:vertical;"></textarea>\
+                                <button type="button" id="btnSubmitDef" class="btn btn-primary" onclick="submitDefinition()" style="margin-top: 20px;">Enviar definición</button>\
                             </div>';
 
                 $("#gameBoard").append(html.replace("%data-word%", word));
 
-                setTimer(60, "#createDefsTimer", loadDefinition);
+                setTimer(60, "#createDefsTimer", submitDefinition);
             }
 
-            function loadDefinition() {
+            game.client.checkDefinitions = function (definitions) {
+                console.log(definitions);
+            }
 
+            function submitDefinition() {
+                game.server.submitDefinition($("#createdDef").val());
             }
 
             $("#btnRerollWord").click(function () {
@@ -212,7 +217,16 @@
             function selectWordAndStartRound() {
                 var word = $("#chosenWord").text();
                 var definition = $("#definition").text();
-                lobby.server.startRound(word, definition);
+                game.server.startRound(word, definition);
+            }
+
+            $(window).on('unload', function () {
+                game.server.removePlayer();
+            });
+
+            game.client.removePlayer = function (playerID) {
+                alert("remove")
+                $("tr[data-playerid='" + playerID + "']").remove();
             }
         });
 

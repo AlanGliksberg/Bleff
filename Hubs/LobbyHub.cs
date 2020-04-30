@@ -13,7 +13,7 @@ namespace Bleff.Hubs
     {
         /// <summary>
         /// Key: connectionID
-        /// Pair: HubPlayer (PlayerID, LobbyID)
+        /// Value: HubPlayer (PlayerID, LobbyID)
         /// </summary>
         public static Dictionary<string, HubPlayer> _PlayersConnected { get; set; }
 

@@ -113,14 +113,35 @@ namespace Bleff.Helpers
             }
         }
 
-        internal static void SetSelectWord(string lobbyID, string word, string definition)
+        public static void SetSelectedWord(string lobbyID, string playerID, string word, string definition)
         {
             var games = _GetGames();
             lock (_GamesLock)
             {
-                games.FirstOrDefault(g => g.Id == lobbyID).SelectedWord = word;
-                games.FirstOrDefault(g => g.Id == lobbyID).SelectedDefinition = definition;
+                var game = games.FirstOrDefault(g => g.Id == lobbyID);
+                game.SelectedWord = word;
+                game.SelectedDefinition = definition;
+                game.PlayersDefinitions = new Dictionary<string, string>();
+                game.PlayersDefinitions.Add(playerID, definition);
             }
+        }
+
+        /// <summary>
+        /// </summary>
+        /// <returns>true if all players submitted their answer</returns>
+        public static bool SetDefinition(string lobbyID, string playerID, string definition)
+        {
+            var games = _GetGames();
+            lock (_GamesLock)
+            {
+                var game = games.FirstOrDefault(g => g.Id == lobbyID);
+                game.PlayersDefinitions.Add(playerID, definition);
+
+                if (game.Players.Count == game.PlayersDefinitions.Count)
+                    return true;
+            }
+
+            return false;
         }
 
         public static void StartGame(string lobbyID)

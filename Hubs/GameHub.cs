@@ -11,7 +11,7 @@ namespace Bleff.Hubs
     {
         /// <summary>
         /// Key: connectionID
-        /// Pair: HubPlayer (PlayerID, LobbyID)
+        /// Value: HubPlayer (PlayerID, LobbyID)
         /// </summary>
         public static Dictionary<string, HubPlayer> _PlayersConnected { get; set; }
 
@@ -59,12 +59,34 @@ namespace Bleff.Hubs
             _AddPlayer(Context.ConnectionId, playerID, lobbyID);
             Groups.Add(Context.ConnectionId, lobbyID);
         }
+        public void RemovePlayer()
+        {
+            var player = _GetPlayer(Context.ConnectionId);
+            _RemovePlayer(Context.ConnectionId);
+            if (player != null)
+            {
+                Helpers.GamesHelper.RemovePlayerFromGame(player.PlayerID, player.LobbyID);
+                Clients.Group(player.LobbyID).RemovePlayer(player.PlayerID);
+            }
+        }
 
         public void StartRound(string word, string definition)
         {
-            var lobby = _GetLobby(Context.ConnectionId);
-            Helpers.GamesHelper.SetSelectWord(lobby, word, definition);
-            Clients.Group(lobby).StartRound(word);
+            var player = _GetPlayer(Context.ConnectionId);
+            Helpers.GamesHelper.SetSelectedWord(player.LobbyID, player.PlayerID, word, definition);
+            Clients.Group(player.LobbyID).StartRound(word);
+        }
+
+        public void SubmitDefinition(string definition)
+        {
+            var player = _GetPlayer(Context.ConnectionId);
+
+            if (Helpers.GamesHelper.SetDefinition(player.LobbyID, player.PlayerID, definition))
+            {
+                var game = Helpers.GamesHelper.GetGameByID(player.LobbyID);
+                var definitions = game.PlayersDefinitions.Select(d => d.Value).ToList();
+                Clients.Group(player.LobbyID).CheckDefinitions(definitions);
+            }
         }
     }
 }

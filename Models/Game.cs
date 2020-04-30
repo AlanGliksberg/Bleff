@@ -15,6 +15,7 @@ namespace Bleff.Models
                 liderPlayer
             };
             State = GameState.Waiting;
+            PlayersDefinitions = new Dictionary<string, string>();
         }
 
         public object _PlayersLock = new object();
@@ -26,5 +27,11 @@ namespace Bleff.Models
         public Player ActualCoordinator { get; set; }
         public string SelectedWord { get; set; }
         public string SelectedDefinition { get; set; }
+
+        /// <summary>
+        /// Key: playerID
+        /// Value: definition
+        /// </summary>
+        public Dictionary<string, string> PlayersDefinitions { get; set; }
     }
 }
