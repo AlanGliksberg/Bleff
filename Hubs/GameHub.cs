@@ -22,12 +22,19 @@ namespace Bleff.Hubs
             lock (_LockPlayers)
             {
                 if (_PlayersConnected == null) _PlayersConnected = new Dictionary<string, HubPlayer>();
-                if (!_PlayersConnected.Any(p => p.Value.PlayerID == playerID))
+                KeyValuePair<string, HubPlayer>? player = _PlayersConnected.FirstOrDefault(p => p.Key == connectionId);
+                if (player == null)
                     _PlayersConnected.Add(connectionId, new HubPlayer()
                     {
                         LobbyID = lobbyID,
                         PlayerID = playerID
                     });
+                else
+                    _PlayersConnected[connectionId] = new HubPlayer()
+                    {
+                        LobbyID = lobbyID,
+                        PlayerID = playerID
+                    };
             }
         }
 
