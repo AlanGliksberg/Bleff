@@ -8,10 +8,11 @@
 </div>
 
 <div class="row">
-    <div class="col-md-4">
+    <div class="col-md-7">
         <ul class="nav nav-tabs">
             <li class="active"><a href="#CreateGameTab" data-toggle="tab">Unirse al Juego</a></li>
             @*<li><a href="#JoinGameTab" data-toggle="tab">Unirse a Juego</a></li>*@
+            <li><a href="#WordGenerator" data-toggle="tab">Generador de palabras</a></li>
         </ul>
 
         <div class="tab-content clearfix">
@@ -42,9 +43,27 @@
                 </form>
             </div>*@
 
+            @*Third TAB*@
+            <div class="tab-pane" id="WordGenerator">
+                <div class="row">
+                    <div id="choseWordSection" class="col-xs-10 chose-word-section">
+                        <div id="chosenWord" class="chosen-word row text-center"></div>
+                        <div class="definition-section pull-left col-xs-12 row">
+                            <b>Definición: </b>
+                            <span id="definition"></span>
+                        </div>
+                    </div>
+                    <div id="divRerollWord" class="col-xs-2">
+                        <button type="button" id="btnRerollWord" class="btn btn-primary" onclick="getRandomWord()">Buscar otra</button>
+                    </div>
+                </div>
+            </div>
+
         </div>
     </div>
 </div>
+
+<div id="aux" class="hidden"></div>
 
 <script type="text/javascript">
     $(document).ready(function () {
@@ -55,11 +74,58 @@
         {
             <text>showSimpleModal("Aviso", "El juego buscado ya está en curso");</text>
         }
+
+        getRandomWord();
     });
+
+    function getRandomWord() {
+        $.ajax({
+            type: "GET",
+            url: "/game/GetRandomWord",
+            contentType: "application/json",
+            dataType: "json",
+            success: function (data) {
+                $("#aux").append(data)
+                var partialWord = $("header");
+                var word = "";
+                partialWord.each(function (i, e) {
+                    word += $(e).text() + " ";
+                });
+                $("#chosenWord").text(word);
+
+                var partialDef = $("p.j:first").children(":not(span):not(abbr)");
+                var definition = "";
+                partialDef.each(function (i, e) {
+                    definition += $(e).text() + " ";
+                });
+                $("#definition").text(definition);
+
+                $("#aux").empty();
+            }
+        });
+    }
 </script>
 
 <style>
     .tab-pane {
         padding-top: 20px;
+    }
+
+    .chosen-word {
+        text-transform: uppercase;
+        font-size: 20px;
+        font-weight: bold;
+        font-style: italic;
+    }
+
+    .definition-section {
+        padding: 13px;
+        margin-top: 15px;
+        border: 1px solid #ccc;
+        border-radius: 16px;
+    }
+
+    #divRerollWord {
+        padding-top: 50px;
     }
 </style>
