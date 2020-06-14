@@ -9,7 +9,6 @@ namespace Bleff.Models
     {
         public Game(Player liderPlayer)
         {
-            Id = Helpers.GamesHelper.GenerateGameID();
             Players = new List<Player>()
             {
                 liderPlayer
@@ -21,7 +20,6 @@ namespace Bleff.Models
         public object _PlayersLock = new object();
 
         public GameState State { get; set; }
-        public string Id { get; set; }
         public List<Player> Players { get; set; }
 
         public Player ActualCoordinator { get; set; }

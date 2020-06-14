@@ -175,7 +175,6 @@
     <Compile Include="Models\GameState.cs" />
     <Compile Include="Models\HubPlayer.cs" />
     <Compile Include="Models\Player.cs" />
-    <Compile Include="Models\StartingAction.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ViewModels\GameVM.cs" />
     <Compile Include="ViewModels\StartGameVM.cs" />

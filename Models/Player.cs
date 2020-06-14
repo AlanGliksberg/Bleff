@@ -11,17 +11,17 @@ namespace Bleff.Models
         {
             PlayerID = Guid.NewGuid().ToString("N");
             Name = name;
-            GameLider = false;
+            IsGameLider = false;
         }
         public Player(string name, bool gameLider)
         {
             PlayerID = Guid.NewGuid().ToString("N");
             Name = name;
-            GameLider = gameLider;
+            IsGameLider = gameLider;
         }
 
         public string PlayerID { get; set; }
         public string Name { get; set; }
-        public bool GameLider { get; set; }
+        public bool IsGameLider { get; set; }
     }
 }

@@ -1,4 +1,5 @@
 ﻿using Bleff.CustomExtensions;
+using Bleff.Helpers;
 using Bleff.Models;
 using Bleff.ViewModels;
 using Newtonsoft.Json;
@@ -13,38 +14,26 @@ namespace Bleff.Controllers
 {
     public class GameController : CustomController
     {
-        public ActionResult Create_Game_Init()
+        public ActionResult Join_Game_Init()
         {
+            var game = GamesHelper.GetGame();
             var player = GetCurrentPlayer();
-            var newGame = Helpers.GamesHelper.CreateNewGame(player);
-
-            var gameVM = new GameVM();
-            gameVM.ActualGame = newGame;
-            gameVM.ActualPlayer = player;
-
-            Session.Set(Keys.GameKeys.ActualGame, gameVM);
-            return RedirectToAction("waiting-game");
-        }
-
-        public ActionResult Join_Game_Init(string gameID)
-        {
-            var game = Helpers.GamesHelper.GetGameByID(gameID);
 
             if (game == null)
             {
-                TempData[Keys.TempDataKeys.GameSearchFailed] = true;
-                return RedirectToAction("index", "home");
+                player.IsGameLider = true;
+                game = GamesHelper.CreateNewGame(player);
             }
-
-            if (game.State == GameState.Started)
+            else
             {
-                TempData[Keys.TempDataKeys.GameStarted] = true;
-                return RedirectToAction("index", "home");
+                if (game.State == GameState.Started)
+                {
+                    TempData[Keys.TempDataKeys.GameStarted] = true;
+                    return RedirectToAction("index", "home");
+                }
+
+                GamesHelper.AddPlayerToGame(game, player);
             }
-
-            var player = GetCurrentPlayer();
-
-            Helpers.GamesHelper.AddPlayerToGame(game, player);
 
             var gameVM = new GameVM();
             gameVM.ActualGame = game;
@@ -59,12 +48,8 @@ namespace Bleff.Controllers
         {
             var gameVM = Session.Get<GameVM>(Keys.GameKeys.ActualGame);
 
-            if (gameVM == null || 
-                gameVM.CheckedIn ||
-                !gameVM.ActualGame.Players.Any(p => p.PlayerID == gameVM.ActualPlayer.PlayerID)) 
+            if (gameVM == null)
                 return RedirectToAction("index", "home");
-
-            gameVM.CheckedIn = true;
 
             return View(gameVM);
         }
@@ -72,8 +57,7 @@ namespace Bleff.Controllers
         public ActionResult Start_Game()
         {
             var gameVM = Session.Get<GameVM>(Keys.GameKeys.ActualGame);
-            gameVM.CheckedIn = false;
-            Helpers.GamesHelper.StartGame(gameVM.ActualGame.Id);
+            GamesHelper.StartGame();
 
             return RedirectToAction("play");
         }
@@ -82,12 +66,8 @@ namespace Bleff.Controllers
         {
             var gameVM = Session.Get<GameVM>(Keys.GameKeys.ActualGame);
 
-            if (gameVM == null ||
-                gameVM.CheckedIn ||
-                !gameVM.ActualGame.Players.Any(p => p.PlayerID == gameVM.ActualPlayer.PlayerID))
+            if (gameVM == null)
                 return RedirectToAction("index", "home");
-
-            gameVM.CheckedIn = true;
 
             return View(gameVM);
         }

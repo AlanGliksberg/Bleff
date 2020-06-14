@@ -6,7 +6,7 @@
 
 <div class="jumbotron">
     <div class="col-xs-10">
-        <p class="lead">BLEFF - Sala @Model.ActualGame.Id</p>
+        <p class="lead">BLEFF</p>
     </div>
 </div>
 
@@ -120,7 +120,7 @@
         $(document).ready(function () {
             var game = $.connection.gameHub;
             $.connection.hub.start().done(function () {
-                game.server.loadGameData('@Model.ActualGame.Id', '@Model.ActualPlayer.PlayerID');
+                game.server.loadGameData('@Model.ActualPlayer.PlayerID');
             });
 
             getRandomWord();

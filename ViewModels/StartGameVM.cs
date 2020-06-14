@@ -9,8 +9,6 @@ namespace Bleff.ViewModels
 {
     public class StartGameVM
     {
-        public StartingAction StartedActionSelected { get; set; }
         public string PlayerName { get; set; }
-        public int GameId { get; set; }
     }
 }

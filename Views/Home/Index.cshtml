@@ -10,8 +10,8 @@
 <div class="row">
     <div class="col-md-4">
         <ul class="nav nav-tabs">
-            <li class="active"><a href="#CreateGameTab" data-toggle="tab">Crear Juego</a></li>
-            <li><a href="#JoinGameTab" data-toggle="tab">Unirse a Juego</a></li>
+            <li class="active"><a href="#CreateGameTab" data-toggle="tab">Unirse al Juego</a></li>
+            @*<li><a href="#JoinGameTab" data-toggle="tab">Unirse a Juego</a></li>*@
         </ul>
 
         <div class="tab-content clearfix">
@@ -22,13 +22,12 @@
                         <label for="playerName">Nombre:</label>
                         <input type="text" class="form-control" id="playerNameNewGame" name="PlayerName" autocomplete="off">
                     </div>
-                    <button type="submit" id="btnCrearPartida" class="btn btn-primary">Crear Partida</button>
-                    <input type="hidden" name="StartedActionSelected" value="@((int)Bleff.Models.StartingAction.NewGame)" />
+                    <button type="submit" id="btnCrearPartida" class="btn btn-primary">Entrar</button>
                 </form>
             </div>
 
             @*Second TAB*@
-            <div class="tab-pane" id="JoinGameTab">
+            @*<div class="tab-pane" id="JoinGameTab">
                 <form action="/Home/Index" method="post">
                     <div class="form-group">
                         <label for="playerName">Nombre:</label>
@@ -41,7 +40,7 @@
                     <button type="submit" id="btnCrearPartida" class="btn btn-primary">Unirse a la Partida</button>
                     <input type="hidden" name="StartedActionSelected" value="@((int)Bleff.Models.StartingAction.JoinGame)" />
                 </form>
-            </div>
+            </div>*@
 
         </div>
     </div>

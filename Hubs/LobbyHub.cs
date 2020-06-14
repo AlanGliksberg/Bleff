@@ -70,21 +70,21 @@ namespace Bleff.Hubs
             Clients.Group(lobbyID).AddPlayer(playerID, playerName);
         }
 
-        public void RemovePlayer()
-        {
-            var player = _GetPlayer(Context.ConnectionId);
-            _RemovePlayer(Context.ConnectionId);
-            if (player != null)
-            {
-                Helpers.GamesHelper.RemovePlayerFromGame(player.PlayerID, player.LobbyID);
-                Clients.Group(player.LobbyID).RemovePlayer(player.PlayerID);
-            }
-        }
+        //public void RemovePlayer()
+        //{
+        //    var player = _GetPlayer(Context.ConnectionId);
+        //    _RemovePlayer(Context.ConnectionId);
+        //    if (player != null)
+        //    {
+        //        Helpers.GamesHelper.RemovePlayerFromGame(player.PlayerID, player.LobbyID);
+        //        Clients.Group(player.LobbyID).RemovePlayer(player.PlayerID);
+        //    }
+        //}
 
-        public void NewLider(string playerID, string lobbyID)
-        {
-            Helpers.GamesHelper.MakeNewLider(playerID, lobbyID);
-        }
+        //public void NewLider(string playerID, string lobbyID)
+        //{
+        //    Helpers.GamesHelper.MakeNewLider(playerID, lobbyID);
+        //}
 
         public void StartGame()
         {
