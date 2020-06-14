@@ -74,7 +74,10 @@ namespace Bleff.Controllers
 
         public async Task<JsonResult> GetRandomWord()
         {
-            var response = await Helpers.ApiHelper.Get("http://www.poxet.com.ar/bleffonardo/palabra.php");
+            var response = await ApiHelper.Get("https://dle.rae.es/?m=random");
+            var sStartIndex = response.IndexOf("<section");
+            var endIndex = response.IndexOf("</section>");
+            response = response.Substring(sStartIndex, endIndex - sStartIndex + 10);
 
             return Json(response, JsonRequestBehavior.AllowGet);
         }

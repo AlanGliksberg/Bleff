@@ -98,7 +98,7 @@
     <script type="text/javascript">
         var pencil = '<span id="pencil" class="glyphicon glyphicon-pencil pull-right"></span>';
         var isCoordinator = @((Model.ActualPlayer.PlayerID == Model.ActualGame.ActualCoordinator.PlayerID).ToString().ToLower());
-
+        
         function getRandomWord() {
             $.ajax({
                 type: "GET",
@@ -106,12 +106,21 @@
                 contentType: "application/json",
                 dataType: "json",
                 success: function (data) {
-                    $("#aux").append(data.substring(0, data.length - 200).slice(990))
-                    var palabra = $("#aux h1").text();
-                    $("#chosenWord").text(palabra);
-                    var definition = $("#definiciones>button:first").text();
-                    definition = definition.replace("[", "").replace("]", "");
+                    $("#aux").append(data)
+                    var partialWord = $("header");
+                    var word = "";
+                    partialWord.each(function (i, e) {
+                        word += $(e).text() + " ";
+                    });
+                    $("#chosenWord").text(word);
+                    
+                    var partialDef = $("p.j:first").children(":not(span):not(abbr)");
+                    var definition = "";
+                    partialDef.each(function (i, e) {
+                        definition += $(e).text() + " ";
+                    });
                     $("#definition").text(definition);
+
                     $("#aux").empty();
                 }
             });
@@ -120,10 +129,11 @@
         $(document).ready(function () {
             var game = $.connection.gameHub;
             $.connection.hub.start().done(function () {
-                game.server.loadGameData('@Model.ActualPlayer.PlayerID');
             });
 
-            getRandomWord();
+            if (isCoordinator) {
+                getRandomWord();
+            }
             setTimer(45, "#choseWordTimer", isCoordinator ? selectWordAndStartRound : null);
 
             game.client.startRound = function (word) {
@@ -215,11 +225,11 @@
             function selectWordAndStartRound() {
                 var word = $("#chosenWord").text();
                 var definition = $("#definition").text();
-                game.server.startRound(word, definition);
+                game.server.startRound('@Model.ActualPlayer.PlayerID', word, definition);
             }
 
             $(window).on('unload', function () {
-                game.server.removePlayer();
+                game.server.removePlayer('@Model.ActualPlayer.PlayerID');
             });
 
             game.client.removePlayer = function (playerID) {

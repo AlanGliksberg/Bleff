@@ -37,38 +37,37 @@ namespace Bleff.Helpers
             }
         }
 
-        //public static void RemovePlayerFromGame(string playerID, string lobbyID)
-        //{
-        //    var games = _GetGames();
-        //    lock (_GamesLock)
-        //    {
-        //        var game = games.FirstOrDefault(l => l.Id == lobbyID);
-        //        game.Players.RemoveAll(p => p.PlayerID == playerID);
-        //        if (game.Players.Count == 0) games.Remove(game);
-        //    }
-        //}
+        public static void RemovePlayerFromGame(string playerID)
+        {
+            lock (_GamesLock)
+            {
+                var game = _Game;
+                game.Players.RemoveAll(p => p.PlayerID == playerID);
+                if (game.Players.Count == 0) _Game = null;
+            }
+        }
 
-        //public static void MakeNewLider(string playerID, string lobbyID)
-        //{
-        //    var games = _GetGames();
-        //    lock (_GamesLock)
-        //    {
-        //        games.FirstOrDefault(g => g.Id == lobbyID).Players.FirstOrDefault(p => p.PlayerID == playerID).GameLider = true;
-        //    }
-        //}
+        public static void MakeNewLider(string playerID)
+        {
+            lock (_GamesLock)
+            {
+                var newLider = _Game.Players.FirstOrDefault(p => p.PlayerID == playerID);
+                newLider.IsGameLider = true;
+                _Game.ActualCoordinator = newLider;
+            }
+        }
 
-        //public static void SetSelectedWord(string lobbyID, string playerID, string word, string definition)
-        //{
-        //    var games = _GetGames();
-        //    lock (_GamesLock)
-        //    {
-        //        var game = games.FirstOrDefault(g => g.Id == lobbyID);
-        //        game.SelectedWord = word;
-        //        game.SelectedDefinition = definition;
-        //        game.PlayersDefinitions = new Dictionary<string, string>();
-        //        game.PlayersDefinitions.Add(playerID, definition);
-        //    }
-        //}
+        public static void SetSelectedWord(string playerID, string word, string definition)
+        {
+            lock (_GamesLock)
+            {
+                var game = _Game;
+                game.SelectedWord = word;
+                game.SelectedDefinition = definition;
+                game.PlayersDefinitions = new Dictionary<string, string>();
+                game.PlayersDefinitions.Add(playerID, definition);
+            }
+        }
 
         ///// <summary>
         ///// </summary>
@@ -97,5 +96,17 @@ namespace Bleff.Helpers
                 game.ActualCoordinator = game.Players.FirstOrDefault(p => p.IsGameLider);
             }
         }
+
+        public static List<int> AllIndexesOf(this string str, string value) {
+    if (String.IsNullOrEmpty(value))
+        throw new ArgumentException("the string to find may not be empty", "value");
+    List<int> indexes = new List<int>();
+    for (int index = 0;; index += value.Length) {
+        index = str.IndexOf(value, index);
+        if (index == -1)
+            return indexes;
+        indexes.Add(index);
+    }
+}
     }
 }
